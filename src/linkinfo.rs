@@ -143,7 +143,7 @@ impl From<&[u8]> for LinkInfo {
             assert_ne!(local_base_path_offset, 0);
             link_info.volume_id = Some(VolumeID::from(&data[volume_id_offset..]));
             link_info.local_base_path = Some(strings::trim_nul_terminated_string(
-                GBK.decode((&data[local_base_path_offset..]), DecoderTrap::Strict).unwrap(),
+                GBK.decode((&data[local_base_path_offset..]), DecoderTrap::Replace).unwrap(),
             ));
 
             if local_base_path_offset_unicode != 0 {
