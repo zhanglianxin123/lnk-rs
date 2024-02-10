@@ -2,6 +2,8 @@ use bitflags::bitflags;
 use byteorder::{ByteOrder, LE};
 use num_derive::{FromPrimitive, ToPrimitive};
 use num_traits::FromPrimitive;
+use encoding::all::GBK;
+use encoding::{DecoderTrap, Encoding};
 
 use crate::strings;
 
@@ -141,7 +143,7 @@ impl From<&[u8]> for LinkInfo {
             assert_ne!(local_base_path_offset, 0);
             link_info.volume_id = Some(VolumeID::from(&data[volume_id_offset..]));
             link_info.local_base_path = Some(strings::trim_nul_terminated_string(
-                String::from_utf8((&data[local_base_path_offset..]).to_vec()).to_string(),
+                GBK.decode((&data[local_base_path_offset..]), DecoderTrap::Strict).unwrap(),
             ));
 
             if local_base_path_offset_unicode != 0 {
